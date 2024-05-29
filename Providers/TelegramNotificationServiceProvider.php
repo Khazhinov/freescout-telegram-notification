@@ -5,7 +5,6 @@ namespace Modules\TelegramNotification\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Auth;
-use Modules\TelegramNotifiction\Entities\ConversationObserver;
 
 class TelegramNotificationServiceProvider extends ServiceProvider
 {
@@ -80,8 +79,18 @@ class TelegramNotificationServiceProvider extends ServiceProvider
             }
         }, 20, 2);
 
-        // Подключаем слушателя при создании диалога
-        \App\Conversation::observe(ConversationObserver::class);
+        \Eventy::addAction('conversation.created_by_customer', function($conversation, $thread, $customer) {
+
+            $message = sprintf("Поступило новое обращение #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>", $conversation->number, $conversation->subject, $conversation->body, route('conversations.view', ['id' => $conversation->number]));
+
+            $this->sendToTelegram($message);
+        }, 30);
+
+        \Eventy::addAction('conversation.customer_replied', function($conversation, $thread, $customer) {
+            $message = sprintf("Поступило новое сообщение в обращении #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>", $conversation->number, $conversation->subject, $conversation->body, route('conversations.view', ['id' => $conversation->number]));
+
+            $this->sendToTelegram($message);
+        }, 30);
     }
 
     /**
@@ -158,5 +167,46 @@ class TelegramNotificationServiceProvider extends ServiceProvider
     public function provides()
     {
         return [];
+    }
+
+    protected function sendToTelegram(string $message): void
+    {
+        $settings = \Option::getOptions([
+            'telegram_notification.active',
+            'telegram_notification.token',
+            'telegram_notification.chat_id',
+        ]);
+
+        if ($settings['telegram_notification.active'] === 'on') {
+            $url = sprintf('https://api.telegram.org/bot%s/sendMessage', $settings['telegram_notification.token']);
+            $data = [
+                'chat_id' => $settings['telegram_notification.chat_id'],
+                'text' => $message,
+                'parse_mode' => 'html',
+                'disable_web_page_preview' => true,
+                'disable_notification' => false
+            ];
+
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 3,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_SSL_VERIFYPEER => false,
+            ]);
+
+            $content = curl_exec($ch);
+
+            if (is_resource($ch)) {
+                curl_close($ch);
+            }
+        }
     }
 }
