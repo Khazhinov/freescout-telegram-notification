@@ -90,10 +90,10 @@ class TelegramNotificationServiceProvider extends ServiceProvider
 {$conversation->body}
 </pre>
 
-<a href=\"{$conversation_link}\">[ЧАТ]</a>
+<a href="{$conversation_link}">[ЧАТ]</a>
 MESSAGE;
             $this->sendToTelegram($message);
-        }, 30, 3);
+        }, 10, 3);
 
         \Eventy::addAction('conversation.customer_replied', function($conversation, $thread, $customer) {
             \Log::info(sprintf("[TELEGRAM-NOTIFICATION] Реакция на событие (%s)", 'conversation.customer_replied'));
@@ -106,11 +106,11 @@ MESSAGE;
 {$conversation->body}
 </pre>
 
-<a href=\"{$conversation_link}\">[ЧАТ]</a>
+<a href="{$conversation_link}">[ЧАТ]</a>
 MESSAGE;
 
             $this->sendToTelegram($message);
-        }, 30, 3);
+        }, 10, 3);
     }
 
     /**
