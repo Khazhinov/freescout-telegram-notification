@@ -13,6 +13,7 @@ class TelegramSender
         ]);
 
         if ($settings['telegram_notification.active'] === 'on') {
+            $url = sprintf('https://api.telegram.org/bot%s/sendMessage', $settings['telegram_notification.token']);
             $data = [
                 'chat_id' => $settings['telegram_notification.chat_id'],
                 'text' => $message,
@@ -21,15 +22,26 @@ class TelegramSender
                 'disable_notification' => false
             ];
 
-            $ch = curl_init(sprintf('https://api.telegram.org/bot%s/sendMessage', $settings['telegram_notification.token']));
-            curl_setopt_array($ch, array(
-                CURLOPT_HEADER => 0,
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_POST => 1,
-                CURLOPT_POSTFIELDS => $data
-            ));
-            curl_exec($ch);
-            curl_close($ch);
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 3,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $data,
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_SSL_VERIFYPEER => false,
+            ]);
+
+            $content = curl_exec($ch);
+
+            if (is_resource($ch)) {
+                curl_close($ch);
+            }
         }
     }
 }
