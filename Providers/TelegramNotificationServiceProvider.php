@@ -84,13 +84,11 @@ class TelegramNotificationServiceProvider extends ServiceProvider
 
             $conversation_link = route('conversations.view', ['id' => $conversation->number]);
             $message = <<<MESSAGE
-Поступило новое обращение #{$conversation->number}
-<pre>
-{$conversation->subject}
-{$conversation->body}
-</pre>
+Поступило новое обращение: <b>#{$conversation->number}</b>
+Заголовок: <b>{$conversation->subject}</b>
 
-<a href="{$conversation_link}">[ЧАТ]</a>
+<pre>{$conversation->body}</pre>
+<a href="{$conversation_link}">[Открыть диалог]</a>
 MESSAGE;
             $this->sendToTelegram($message);
         }, 10, 3);
@@ -100,13 +98,11 @@ MESSAGE;
 
             $conversation_link = route('conversations.view', ['id' => $conversation->number]);
             $message = <<<MESSAGE
-Поступило новое сообщение в обращении #{$conversation->number}
-<pre>
-{$conversation->subject}
-{$conversation->body}
-</pre>
+Поступило новое сообщение в обращении: <b>#{$conversation->number}</b>
+Заголовок: <b>{$conversation->subject}</b>
 
-<a href="{$conversation_link}">[ЧАТ]</a>
+<pre>{$conversation->body}</pre>
+<a href="{$conversation_link}">[Открыть диалог]</a>
 MESSAGE;
 
             $this->sendToTelegram($message);
