@@ -87,7 +87,6 @@ class TelegramNotificationServiceProvider extends ServiceProvider
 Поступило новое обращение: <b>#{$conversation->number}</b>
 Заголовок: <b>{$conversation->subject}</b>
 
-<pre>{$conversation->body}</pre>
 <a href="{$conversation_link}">[Открыть диалог]</a>
 MESSAGE;
             $this->sendToTelegram($message);
@@ -101,7 +100,6 @@ MESSAGE;
 Поступило новое сообщение в обращении: <b>#{$conversation->number}</b>
 Заголовок: <b>{$conversation->subject}</b>
 
-<pre>{$conversation->body}</pre>
 <a href="{$conversation_link}">[Открыть диалог]</a>
 MESSAGE;
 
