@@ -1,0 +1,25 @@
+{
+    "name": "freescout/telegram-notification",
+    "description": "",
+    "authors": [
+        {
+            "name": "Vladislav Khazhinov",
+            "email": "khazhinov@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TelegramNotificationServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\TelegramNotification\\": ""
+        }
+    }
+}
