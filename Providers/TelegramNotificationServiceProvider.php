@@ -80,6 +80,7 @@ class TelegramNotificationServiceProvider extends ServiceProvider
         }, 20, 2);
 
         \Eventy::addAction('conversation.created_by_customer', function($conversation, $thread, $customer) {
+            \Log::info(sprintf("[TELEGRAM-NOTIFICATION] Реакция на событие (%s)", 'conversation.created_by_customer'));
             $message = sprintf(
                 "Поступило новое обращение #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>",
                 $conversation->number,
@@ -92,6 +93,8 @@ class TelegramNotificationServiceProvider extends ServiceProvider
         }, 30, 3);
 
         \Eventy::addAction('conversation.customer_replied', function($conversation, $thread, $customer) {
+            \Log::info(sprintf("[TELEGRAM-NOTIFICATION] Реакция на событие (%s)", 'conversation.customer_replied'));
+
             $message = sprintf(
                 "Поступило новое сообщение в обращении #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>",
                 $conversation->number,
