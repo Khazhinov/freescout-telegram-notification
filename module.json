@@ -1,18 +1,18 @@
 {
-    "name": "OAuth",
-    "alias": "oauth",
+    "name": "TelegramNotification",
+    "alias": "telegram_notification",
     "description": "",
     "version": "1.0.0",
     "detailsUrl": "",
     "author": "",
     "authorUrl": "",
     "requiredAppVersion": "1.0.2",
-    "license": "AGPL-3.0",
+    "license": "MIT",
     "keywords": [],
     "active": 0,
     "order": 0,
     "providers": [
-        "Modules\\OAuth\\Providers\\OAuthServiceProvider"
+        "Modules\\TelegramNotification\\Providers\\TelegramNotificationServiceProvider"
     ],
     "aliases": {},
     "files": [
