@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="form-group{{ $errors->has('settings.telegram_notification.chat_id') ? ' has-error' : '' }} margin-bottom-10">
-        <label for="telegram_notification.chat_id" class="col-sm-2 control-label">{{ __('Client Secret') }}</label>
+        <label for="telegram_notification.chat_id" class="col-sm-2 control-label">{{ __('Chat ID') }}</label>
 
         <div class="col-sm-6">
             <input id="telegram_notification.chat_id" type="text" class="form-control input-sized-lg"
