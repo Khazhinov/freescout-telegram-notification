@@ -89,7 +89,7 @@ class TelegramNotificationServiceProvider extends ServiceProvider
             );
 
             $this->sendToTelegram($message);
-        }, 20, 3);
+        }, 14, 3);
 
         \Eventy::addAction('conversation.customer_replied', function($conversation, $thread, $customer) {
             $message = sprintf(
@@ -101,7 +101,7 @@ class TelegramNotificationServiceProvider extends ServiceProvider
             );
 
             $this->sendToTelegram($message);
-        }, 20, 3);
+        }, 14, 3);
     }
 
     /**
