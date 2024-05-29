@@ -80,17 +80,28 @@ class TelegramNotificationServiceProvider extends ServiceProvider
         }, 20, 2);
 
         \Eventy::addAction('conversation.created_by_customer', function($conversation, $thread, $customer) {
-
-            $message = sprintf("Поступило новое обращение #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>", $conversation->number, $conversation->subject, $conversation->body, route('conversations.view', ['id' => $conversation->number]));
+            $message = sprintf(
+                "Поступило новое обращение #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>",
+                $conversation->number,
+                $conversation->subject,
+                $conversation->body,
+                route('conversations.view', ['id' => $conversation->number])
+            );
 
             $this->sendToTelegram($message);
-        }, 30);
+        }, 30, 3);
 
         \Eventy::addAction('conversation.customer_replied', function($conversation, $thread, $customer) {
-            $message = sprintf("Поступило новое сообщение в обращении #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>", $conversation->number, $conversation->subject, $conversation->body, route('conversations.view', ['id' => $conversation->number]));
+            $message = sprintf(
+                "Поступило новое сообщение в обращении #%d<pre>%s\n%s</pre>\n<a href=\"%s\">[ЧАТ]</a>",
+                $conversation->number,
+                $conversation->subject,
+                $conversation->body,
+                route('conversations.view', ['id' => $conversation->number])
+            );
 
             $this->sendToTelegram($message);
-        }, 30);
+        }, 30, 3);
     }
 
     /**
@@ -178,6 +189,7 @@ class TelegramNotificationServiceProvider extends ServiceProvider
         ]);
 
         if ($settings['telegram_notification.active'] === 'on') {
+            \Log::info(sprintf("[TELEGRAM-NOTIFICATION] Попытка отправки сообщения (%s)", $message));
             $url = sprintf('https://api.telegram.org/bot%s/sendMessage', $settings['telegram_notification.token']);
             $data = [
                 'chat_id' => $settings['telegram_notification.chat_id'],
@@ -207,6 +219,8 @@ class TelegramNotificationServiceProvider extends ServiceProvider
             if (is_resource($ch)) {
                 curl_close($ch);
             }
+
+            \Log::info(sprintf("[TELEGRAM-NOTIFICATION] Ответ Telegram (%s)", $content));
         }
     }
 }
