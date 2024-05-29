@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TelegramNotifiction\Entities;
+namespace Modules\TelegramNotification\Entities;
 
 class TelegramSender
 {

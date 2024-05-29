@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\TelegramNotifiction\Providers;
+namespace Modules\TelegramNotification\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
